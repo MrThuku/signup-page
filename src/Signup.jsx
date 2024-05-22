@@ -22,17 +22,39 @@ const Signup = () => {
       ...formValues,
       [name]: value
     });
+    setErrorMessage('');
+
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (formValues.password !== formValues.confirmPassword) {
+    const errors = validateForm();
+
+    if (errors) {
+      setErrorMessage(errors);
+    } else if (formValues.password !== formValues.confirmPassword) {
       setErrorMessage('Passwords do not match.');
     } else {
       setErrorMessage('');
-      // Submit the form
       console.log('Form submitted', formValues);
     }
+  };
+
+  const validateForm = () => {
+    const idNumberRegex = /^\d{8}$/;
+    if (!idNumberRegex.test(formValues.idNumber)) {
+      return 'ID Number should be 8 digits.';
+    }
+    const phoneNumberRegex = /^\d{10}$/;
+    if (!phoneNumberRegex.test(formValues.phoneNumber)) {
+      return 'Phone Number should be 10 digits.';
+    }
+    const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()]).{8,}$/;
+    if (!passwordRegex.test(formValues.password)) {
+      return 'Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one digit, and one special character.';
+    }
+
+    return '';
   };
 
   return (

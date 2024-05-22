@@ -8,7 +8,9 @@ const ResetPassword = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const validationErrors = validateInputs();
 
+    if (Object.keys(validationErrors).length === 0) {
     try {
       const response = await fetch('/api/reset-password', {
         method: 'POST',
@@ -30,7 +32,13 @@ const ResetPassword = () => {
       alert('An error occurred. Please try again later.');
       console.error('Error resetting password:', error);
     }
-  };
+  }};
+  const validateInputs = () => {
+   // const errors = {};
+    if (code.trim().length === 0) {
+      alert('Please enter a reset code.');
+    }
+  }
 
   return (
     <div className=' container'>
@@ -48,7 +56,7 @@ const ResetPassword = () => {
           placeholder="Enter reset code"
           value={code}
           onChange={(e) => setCode(e.target.value)}
-          required
+          
         />
         <input
           type="password"
